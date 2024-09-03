@@ -170,7 +170,13 @@ loadBubbleImages(imageUrls);
         // Return an array of images
         return loadedimages;
     }
-    
+ 
+var launcherImage = new Image();
+launcherImage.src = "https://i.postimg.cc/rRjn53Cz/unicorn.png";
+
+var backgroundImage = new Image();
+backgroundImage.src = "https://i.postimg.cc/0QmgWQQ5/sxu9-tmxa-200909.jpg";
+   
     // Initialize the game
     function init() {
         // Load images
@@ -780,24 +786,19 @@ loadBubbleImages(imageUrls);
     
     // Draw a frame around the game
     function drawFrame() {
-        // Draw background
-        context.fillStyle = "#e8eaec";
-        context.fillRect(0, 0, canvas.width, canvas.height);
-        
-        // Draw header
-        context.fillStyle = "#303030";
-        context.fillRect(0, 0, canvas.width, 79);
-        
-        // Draw title
-        context.fillStyle = "#ffffff";
-        context.font = "24px Verdana";
-        context.fillText("Bubble Shooter Example - Rembound.com", 10, 37);
-        
-        // Display fps
-        context.fillStyle = "#ffffff";
-        context.font = "12px Verdana";
-        context.fillText("Fps: " + fps, 13, 57);
-    }
+    // Dibujar el fondo escalado para cubrir todo el canvas
+    context.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+
+    // Dibujar el encabezado
+    context.fillStyle = "#303030";
+    context.fillRect(0, 0, canvas.width, 65);
+
+    context.fillStyle = "#ffffff";
+    context.font = "24px Verdana";
+    drawCenterText("Bubble Shooter", 0, 30, canvas.width);
+}
+
+
     
     // Render tiles
     function renderTiles() {
@@ -842,35 +843,29 @@ loadBubbleImages(imageUrls);
     
     // Render the player bubble
     function renderPlayer() {
-        var centerx = player.x + level.tilewidth/2;
-        var centery = player.y + level.tileheight/2;
-        
-        // Draw player background circle
-        context.fillStyle = "#7a7a7a";
-        context.beginPath();
-        context.arc(centerx, centery, level.radius+12, 0, 2*Math.PI, false);
-        context.fill();
-        context.lineWidth = 2;
-        context.strokeStyle = "#8c8c8c";
-        context.stroke();
+    var centerx = player.x + level.tilewidth / 2;
+    var centery = player.y + level.tileheight / 2;
 
-        // Draw the angle
-        context.lineWidth = 2;
-        context.strokeStyle = "#0000ff";
-        context.beginPath();
-        context.moveTo(centerx, centery);
-        context.lineTo(centerx + 1.5*level.tilewidth * Math.cos(degToRad(player.angle)), centery - 1.5*level.tileheight * Math.sin(degToRad(player.angle)));
-        context.stroke();
-        
-        // Draw the next bubble
-        drawBubble(player.nextbubble.x, player.nextbubble.y, player.nextbubble.tiletype);
-        
-        // Draw the bubble
-        if (player.bubble.visible) {
-            drawBubble(player.bubble.x, player.bubble.y, player.bubble.tiletype);
-        }
-        
+    // Dibujar la imagen del lanzador
+    context.drawImage(launcherImage, centerx - level.tilewidth / 2, centery - level.tileheight / 2, level.tilewidth, level.tileheight);
+
+    // Dibujar el ángulo
+    context.lineWidth = 2;
+    context.strokeStyle = "#0000ff";
+    context.beginPath();
+    context.moveTo(centerx, centery);
+    context.lineTo(centerx + 1.5 * level.tilewidth * Math.cos(degToRad(player.angle)), centery - 1.5 * level.tileheight * Math.sin(degToRad(player.angle)));
+    context.stroke();
+
+    // Dibujar la burbuja siguiente
+    drawBubble(player.nextbubble.x, player.nextbubble.y, player.nextbubble.tiletype);
+
+    // Dibujar la burbuja
+    if (player.bubble.visible) {
+        drawBubble(player.bubble.x, player.bubble.y, player.bubble.tiletype);
     }
+}
+
     
     // Get the tile coordinate
     function getTileCoordinate(column, row) {
